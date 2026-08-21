@@ -5,189 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Verb Master 100 - เกมจับคู่คำศัพท์กริยา</title>
     
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts - Prompt & Kanit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        * {
-            font-family: 'Prompt', sans-serif;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        h1, h2, h3, .font-heading {
-            font-family: 'Kanit', sans-serif;
-        }
-
-        /* 3D Card Flip Effect */
-        .perspective-1000 {
-            perspective: 1000px;
-        }
-        
-        .card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform-style: preserve-3d;
-        }
-
-        .card.flipped .card-inner {
-            transform: rotateY(180deg);
-        }
-
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 0.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-
-        .card-front {
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-            border: 2px solid #818cf8;
-            transform: rotateY(0deg);
-        }
-
-        .card-back {
-            background: #ffffff;
-            border: 2px solid #e0e7ff;
-            transform: rotateY(180deg);
-        }
-
-        .card.matched .card-back {
-            background: #ecfdf5;
-            border-color: #10b981;
-            animation: pulse-green 0.5s ease-in-out;
-        }
-
-        .card.wrong .card-back {
-            background: #fef2f2;
-            border-color: #ef4444;
-            animation: shake 0.4s ease-in-out;
-        }
-
-        @keyframes pulse-green {
-            0% { transform: rotateY(180deg) scale(1); }
-            50% { transform: rotateY(180deg) scale(1.08); }
-            100% { transform: rotateY(180deg) scale(1); }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: rotateY(180deg) translateX(0); }
-            20%, 60% { transform: rotateY(180deg) translateX(-6px); }
-            40%, 80% { transform: rotateY(180deg) translateX(6px); }
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 8px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 8px;
-        }
+        * { font-family: 'Prompt', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
+        h1, h2, h3, .font-heading { font-family: 'Kanit', sans-serif; }
+        .perspective-1000 { perspective: 1000px; }
+        .card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; }
+        .card.flipped .card-inner { transform: rotateY(180deg); }
+        .card-front, .card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; padding: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .card-front { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); border: 2px solid #818cf8; transform: rotateY(0deg); }
+        .card-back { background: #ffffff; border: 2px solid #e0e7ff; transform: rotateY(180deg); color: #1e293b; font-weight: 600; }
+        .card.matched .card-back { background: #ecfdf5; border-color: #10b981; animation: pulse-green 0.5s ease-in-out; }
+        .card.wrong .card-back { background: #fef2f2; border-color: #ef4444; animation: shake 0.4s ease-in-out; }
+        @keyframes pulse-green { 0% { transform: rotateY(180deg) scale(1); } 50% { transform: rotateY(180deg) scale(1.08); } 100% { transform: rotateY(180deg) scale(1); } }
+        @keyframes shake { 0%, 100% { transform: rotateY(180deg) translateX(0); } 20%, 60% { transform: rotateY(180deg) translateX(-6px); } 40%, 80% { transform: rotateY(180deg) translateX(6px); } }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between overflow-x-hidden">
 
-    <!-- Top Header -->
     <header class="bg-slate-800/80 backdrop-blur-md border-b border-slate-700/60 sticky top-0 z-40 px-4 py-3">
         <div class="max-w-4xl mx-auto flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-500/30">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-xl shadow-lg">
                     <i class="fa-solid fa-graduation-cap"></i>
                 </div>
                 <div>
-                    <h1 class="font-extrabold text-lg sm:text-xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400 leading-tight">
-                        Verb Master 100
-                    </h1>
-                    <p class="text-xs text-slate-400 hidden sm:block">เกมจับคู่คำศัพท์กริยา 100 คำ (40 ผู้เล่น)</p>
+                    <h1 class="font-extrabold text-lg sm:text-xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400 leading-tight">Verb Master 100</h1>
+                    <p class="text-xs text-slate-400 hidden sm:block">เกมจับคู่คำศัพท์กริยา (สูงสุด 40 ผู้เล่น)</p>
                 </div>
             </div>
-            
-            <div id="userInfo" class="hidden items-center space-x-2 bg-slate-700/50 px-3 py-1.5 rounded-full border border-slate-600">
+            <div id="userInfo" class="flex items-center space-x-2 bg-slate-700/50 px-3 py-1.5 rounded-full border border-slate-600">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
                 <span id="displayPlayerName" class="text-xs sm:text-sm font-medium text-slate-200 max-w-[100px] truncate">ผู้เล่น</span>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Container -->
     <main class="max-w-4xl w-full mx-auto p-4 flex-1 flex flex-col justify-center">
 
-        <!-- VIEW 1: LOBBY (Create / Join Room) -->
+        <!-- LOBBY -->
         <div id="viewLobby" class="space-y-6">
             <div class="text-center space-y-2">
                 <span class="bg-indigo-500/10 text-indigo-400 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20">
                     ⚡ พรีวิว 5 วินาที • เวลา 2 นาที • ผิดได้ไม่เกิน 10 ครั้ง
                 </span>
                 <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">ท้าทายคลังคำศัพท์กริยา</h2>
-                <p class="text-slate-400 text-sm max-w-md mx-auto">สะสมคำศัพท์กริยา 100 คำ เล่นคนเดียวหรือแข่งขันกับเพื่อนในห้องเดียวกันได้ถึง 40 คน!</p>
+                <p class="text-slate-400 text-sm max-w-md mx-auto">เล่นคนเดียวหรือสร้างห้องแข่งขันกับเพื่อนแบบเรียลไทม์สูงสุด 40 คน!</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                <!-- Name Card -->
                 <div class="md:col-span-2 bg-slate-800/90 p-5 rounded-2xl border border-slate-700 shadow-xl space-y-3">
                     <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">
                         <i class="fa-solid fa-user-ninja mr-1.5 text-indigo-400"></i> ชื่อผู้เล่นของคุณ
                     </label>
-                    <input type="text" id="inputPlayerName" placeholder="ใส่ชื่อเล่นของคุณที่นี่..." 
-                        class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors text-sm font-medium" maxLength="15">
+                    <input type="text" id="inputPlayerName" placeholder="ใส่ชื่อเล่นของคุณที่นี่..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 text-sm font-medium" maxLength="15">
                 </div>
 
-                <!-- Action: Solo Play -->
-                <div class="bg-slate-800/90 p-5 rounded-2xl border border-slate-700 shadow-xl flex flex-col justify-between space-y-4 hover:border-indigo-500/50 transition">
+                <!-- Solo Play -->
+                <div class="bg-slate-800/90 p-5 rounded-2xl border border-slate-700 shadow-xl flex flex-col justify-between space-y-4">
                     <div>
                         <div class="w-10 h-10 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center mb-3">
                             <i class="fa-solid fa-user text-lg"></i>
                         </div>
                         <h3 class="font-bold text-lg text-white">เล่นคนเดียว Solo</h3>
-                        <p class="text-xs text-slate-400 mt-1">ทดสอบความจำ ฝึกฝนคำศัพท์กริยาด้วยตัวเอง 2 นาทีเต็ม</p>
+                        <p class="text-xs text-slate-400 mt-1">ทดสอบความจำ ฝึกฝนคำศัพท์กริยาด้วยตัวเอง</p>
                     </div>
-                    <button id="btnStartSolo" class="w-full bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-indigo-600/30 flex items-center justify-center space-x-2">
+                    <button id="btnStartSolo" class="w-full bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-bold py-3 rounded-xl transition-all shadow-lg flex items-center justify-center space-x-2">
                         <span>เริ่มเล่นทันที</span>
                         <i class="fa-solid fa-play text-xs"></i>
                     </button>
                 </div>
 
-                <!-- Action: Room Play -->
-                <div class="bg-slate-800/90 p-5 rounded-2xl border border-slate-700 shadow-xl flex flex-col justify-between space-y-4 hover:border-purple-500/50 transition">
+                <!-- Room Play -->
+                <div class="bg-slate-800/90 p-5 rounded-2xl border border-slate-700 shadow-xl flex flex-col justify-between space-y-4">
                     <div>
                         <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center mb-3">
                             <i class="fa-solid fa-users text-lg"></i>
                         </div>
                         <h3 class="font-bold text-lg text-white">เล่นหลายคน (สูงสุด 40 คน)</h3>
-                        <p class="text-xs text-slate-400 mt-1">สร้างห้องหรือใส่รหัส 4 หลักเพื่อแข่งกับเพื่อนเรียลไทม์</p>
+                        <p class="text-xs text-slate-400 mt-1">สร้างห้องหรือใส่รหัส 4 หลักเพื่อแข่งกับเพื่อน</p>
                     </div>
                     
                     <div class="space-y-2">
-                        <button id="btnCreateRoom" class="w-full bg-purple-600 hover:bg-purple-500 active:scale-95 text-white font-bold py-2.5 rounded-xl transition-all shadow-lg shadow-purple-600/30 text-sm">
+                        <button id="btnCreateRoom" class="w-full bg-purple-600 hover:bg-purple-500 active:scale-95 text-white font-bold py-2.5 rounded-xl transition-all text-sm">
                             <i class="fa-solid fa-plus-circle mr-1"></i> สร้างห้องใหม่ (เป็น Host)
                         </button>
                         
                         <div class="flex space-x-2">
-                            <input type="text" id="inputRoomCode" placeholder="รหัสห้อง 4 หลัก" maxLength="4"
-                                class="w-1/2 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-center text-white placeholder-slate-500 text-sm uppercase tracking-widest font-mono">
+                            <input type="text" id="inputRoomCode" placeholder="รหัสห้อง 4 หลัก" maxLength="4" class="w-1/2 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-center text-white placeholder-slate-500 text-sm uppercase tracking-widest font-mono">
                             <button id="btnJoinRoom" class="w-1/2 bg-slate-700 hover:bg-slate-600 active:scale-95 text-white font-bold py-2 rounded-xl transition-all text-sm">
                                เข้าร่วม
                             </button>
@@ -197,7 +107,7 @@
             </div>
         </div>
 
-        <!-- VIEW 2: ROOM WAITING LOBBY -->
+        <!-- ROOM WAITING LOBBY -->
         <div id="viewRoomLobby" class="hidden max-w-xl mx-auto space-y-6">
             <div class="bg-slate-800/90 p-6 rounded-3xl border border-slate-700 shadow-2xl text-center space-y-4">
                 <div class="inline-flex items-center space-x-2 bg-purple-500/20 text-purple-300 border border-purple-500/30 px-4 py-1.5 rounded-full text-xs font-semibold">
@@ -207,13 +117,9 @@
                 
                 <div>
                     <p class="text-xs text-slate-400 uppercase tracking-widest">รหัสเข้าร่วมห้อง (Room Code)</p>
-                    <div id="displayRoomCode" class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 tracking-widest font-mono my-1">
-                        ----
-                    </div>
-                    <p class="text-xs text-slate-500">บอกรหัสนี้กับเพื่อนให้เข้าร่วมผ่านมือถือ!</p>
+                    <div id="displayRoomCode" class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 tracking-widest font-mono my-1">----</div>
                 </div>
 
-                <!-- Player Count & List -->
                 <div class="border-t border-slate-700/80 pt-4 space-y-3">
                     <div class="flex items-center justify-between text-sm px-2">
                         <span class="text-slate-400 font-medium">รายชื่อผู้เล่นในห้อง</span>
@@ -222,14 +128,11 @@
                         </span>
                     </div>
 
-                    <div id="playerList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-48 overflow-y-auto p-1">
-                        <!-- Dynamic player pills inserted here -->
-                    </div>
+                    <div id="playerList" class="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-48 overflow-y-auto p-1"></div>
                 </div>
 
-                <!-- Host Control / Waiting notice -->
                 <div class="pt-2">
-                    <button id="btnStartRoomGame" class="hidden w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 active:scale-95 text-white font-extrabold py-3.5 rounded-xl transition-all shadow-xl text-base">
+                    <button id="btnStartRoomGame" class="hidden w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 active:scale-95 text-white font-extrabold py-3.5 rounded-xl transition-all text-base">
                         <i class="fa-solid fa-play mr-2"></i> เริ่มเกมสำหรับทุกคนในห้อง
                     </button>
                     <p id="waitingNotice" class="text-slate-400 text-sm animate-pulse italic">
@@ -239,120 +142,81 @@
             </div>
         </div>
 
-        <!-- VIEW 3: GAME BOARD -->
+        <!-- GAME BOARD -->
         <div id="viewGameBoard" class="hidden space-y-4">
-            
-            <!-- Game HUD (Timer, Preview Indicator, Errors) -->
             <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-3 sm:p-4 shadow-xl space-y-3">
                 <div class="flex items-center justify-between text-xs sm:text-sm font-semibold">
-                    
-                    <!-- Preview / Phase Tag -->
                     <div id="statusBadge" class="flex items-center space-x-1.5 bg-amber-500/20 text-amber-300 border border-amber-500/30 px-3 py-1 rounded-full">
                         <i class="fa-solid fa-eye animate-bounce"></i>
                         <span>พรีวิวจำการ์ด: <strong id="previewTimer" class="text-amber-200">5</strong> วินาที</span>
                     </div>
 
-                    <!-- Room indicator if multiplayer -->
                     <div id="gameRoomBadge" class="hidden text-xs bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg">
                         ห้อง: <span id="hudRoomCode" class="font-mono text-purple-300 font-bold">---</span>
                     </div>
 
-                    <!-- Hearts / Lives remaining -->
                     <div class="flex items-center space-x-1">
-                        <span class="text-slate-400 mr-1 text-xs">ผิดได้:</span>
-                        <div id="livesContainer" class="flex space-x-1 text-red-500 text-sm">
-                            <!-- 10 lives generated dynamically -->
-                        </div>
+                        <span class="text-slate-400 mr-1 text-xs">พลังชีวิต:</span>
+                        <div id="livesContainer" class="flex space-x-1 text-red-500 text-sm"></div>
                     </div>
                 </div>
 
-                <!-- Main Progress Bar (Timer) -->
                 <div>
                     <div class="flex justify-between text-xs text-slate-400 mb-1 font-medium">
                         <span><i class="fa-regular fa-clock mr-1"></i>เวลาคงเหลือ</span>
                         <span id="timerText" class="font-bold text-white font-mono">02:00</span>
                     </div>
                     <div class="w-full bg-slate-700 rounded-full h-3 overflow-hidden p-0.5">
-                        <div id="timerBar" class="bg-gradient-to-r from-emerald-400 via-indigo-500 to-rose-500 h-full rounded-full transition-all duration-1000 w-full"></div>
+                        <div id="timerBar" class="bg-gradient-to-r from-emerald-400 via-indigo-500 to-rose-500 h-full rounded-full transition-all duration-300 w-full"></div>
                     </div>
                 </div>
 
-                <!-- Score Board bar -->
                 <div class="flex justify-between items-center text-xs sm:text-sm pt-1 border-t border-slate-700/60">
-                    <div>
-                        <span class="text-slate-400">จับคู่สำเร็จ:</span>
-                        <span id="matchedCount" class="font-bold text-emerald-400 ml-1">0</span> คู่
-                    </div>
-                    <div>
-                        <span class="text-slate-400">คะแนน:</span>
-                        <span id="scoreDisplay" class="font-bold text-amber-400 ml-1 text-base">0</span>
-                    </div>
-                    <div>
-                        <span class="text-slate-400">ผิดพลาด:</span>
-                        <span id="errorCountDisplay" class="font-bold text-rose-400 ml-1">0</span>/10
-                    </div>
+                    <div><span class="text-slate-400">จับคู่สำเร็จ:</span> <span id="matchedCount" class="font-bold text-emerald-400 ml-1">0</span> คู่</div>
+                    <div><span class="text-slate-400">คะแนน:</span> <span id="scoreDisplay" class="font-bold text-amber-400 ml-1 text-base">0</span></div>
+                    <div><span class="text-slate-400">ผิดพลาด:</span> <span id="errorCountDisplay" class="font-bold text-rose-400 ml-1">0</span>/10</div>
                 </div>
             </div>
 
-            <!-- Preview Countdown Overlay Banner -->
             <div id="previewBanner" class="bg-gradient-to-r from-amber-500 to-orange-600 text-slate-900 font-extrabold py-2 px-4 rounded-xl text-center shadow-lg text-xs sm:text-sm animate-pulse flex items-center justify-center space-x-2">
                 <i class="fa-solid fa-lightbulb text-lg"></i>
                 <span>ช่วงเวลาพรีวิว 5 วินาที! จดจำตำแหน่งคำศัพท์และคำแปลให้ได้มากที่สุด!</span>
             </div>
 
-            <!-- Cards Grid Container -->
-            <div id="cardGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 sm:gap-3 min-h-[360px]">
-                <!-- Cards injected dynamically via JS -->
-            </div>
+            <div id="cardGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 sm:gap-3 min-h-[360px]"></div>
         </div>
 
-        <!-- VIEW 4: GAME OVER / LEADERBOARD -->
+        <!-- GAME OVER -->
         <div id="viewGameOver" class="hidden max-w-xl mx-auto space-y-6">
             <div class="bg-slate-800/90 p-6 rounded-3xl border border-slate-700 shadow-2xl text-center space-y-5">
-                
-                <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-400 to-amber-600 text-slate-900 flex items-center justify-center mx-auto text-3xl shadow-xl shadow-amber-500/20">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-400 to-amber-600 text-slate-900 flex items-center justify-center mx-auto text-3xl shadow-xl">
                     <i class="fa-solid fa-trophy"></i>
                 </div>
-
                 <div>
-                    <h2 id="endGameTitle" class="text-2xl sm:text-3xl font-extrabold text-white">หมดเวลา! สรุปผลงาน</h2>
-                    <p id="endGameSub" class="text-xs text-slate-400 mt-1">คุณทำผลงานได้อย่างยอดเยี่ยม!</p>
+                    <h2 id="endGameTitle" class="text-2xl sm:text-3xl font-extrabold text-white">จบเกม! สรุปผลงาน</h2>
                 </div>
-
-                <!-- Personal Stats Cards -->
                 <div class="grid grid-cols-3 gap-2 bg-slate-900/80 p-3 rounded-2xl border border-slate-700/80">
                     <div class="p-2">
-                        <p class="text-[10px] text-slate-400 uppercase font-semibold">คะแนนรวม</p>
-                        <p id="finalScore" class="text-xl sm:text-2xl font-extrabold text-amber-400 font-mono">0</p>
+                        <p class="text-[10px] text-slate-400 font-semibold">คะแนนรวม</p>
+                        <p id="finalScore" class="text-xl font-extrabold text-amber-400 font-mono">0</p>
                     </div>
                     <div class="p-2 border-x border-slate-800">
-                        <p class="text-[10px] text-slate-400 uppercase font-semibold">จับคู่ได้</p>
-                        <p id="finalPairs" class="text-xl sm:text-2xl font-extrabold text-emerald-400 font-mono">0 คู่</p>
+                        <p class="text-[10px] text-slate-400 font-semibold">จับคู่ได้</p>
+                        <p id="finalPairs" class="text-xl font-extrabold text-emerald-400 font-mono">0 คู่</p>
                     </div>
                     <div class="p-2">
-                        <p class="text-[10px] text-slate-400 uppercase font-semibold">ผิดพลาด</p>
-                        <p id="finalErrors" class="text-xl sm:text-2xl font-extrabold text-rose-400 font-mono">0/10</p>
+                        <p class="text-[10px] text-slate-400 font-semibold">ผิดพลาด</p>
+                        <p id="finalErrors" class="text-xl font-extrabold text-rose-400 font-mono">0/10</p>
                     </div>
                 </div>
 
-                <!-- Multiplayer Leaderboard -->
-                <div id="leaderboardSection" class="text-left space-y-2 pt-2 border-t border-slate-700">
-                    <h3 class="font-bold text-sm text-slate-300 flex items-center justify-between">
-                        <span><i class="fa-solid fa-list-ol mr-1 text-indigo-400"></i> ตารางคะแนนผู้เล่นในห้อง (สูงสุด 40 คน)</span>
-                        <span class="text-xs text-slate-500 font-normal">Real-time</span>
-                    </h3>
-                    
-                    <div id="leaderboardList" class="space-y-1.5 max-h-56 overflow-y-auto pr-1">
-                        <!-- Dynamic leaderboard rows -->
-                    </div>
+                <div id="leaderboardSection" class="hidden text-left space-y-2 pt-2 border-t border-slate-700">
+                    <h3 class="font-bold text-sm text-slate-300">ตารางคะแนนในห้อง</h3>
+                    <div id="leaderboardList" class="space-y-1.5 max-h-48 overflow-y-auto"></div>
                 </div>
 
-                <!-- Action Buttons -->
                 <div class="flex space-x-3 pt-2">
-                    <button id="btnPlayAgain" class="flex-1 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-indigo-600/30 text-sm">
-                        <i class="fa-solid fa-rotate-right mr-1"></i> เล่นอีกครั้ง
-                    </button>
-                    <button id="btnBackLobby" class="flex-1 bg-slate-700 hover:bg-slate-600 active:scale-95 text-white font-bold py-3 rounded-xl transition-all text-sm">
+                    <button id="btnBackLobby" class="w-full bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-bold py-3 rounded-xl transition-all text-sm">
                         <i class="fa-solid fa-house mr-1"></i> กลับหน้าหลัก
                     </button>
                 </div>
@@ -361,64 +225,289 @@
 
     </main>
 
-    <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-slate-800 border border-slate-600 text-white text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-2xl transition-all duration-300 opacity-0 pointer-events-none z-50 flex items-center space-x-2">
-        <i id="toastIcon" class="fa-solid fa-circle-info text-indigo-400"></i>
+        <i class="fa-solid fa-circle-info text-indigo-400"></i>
         <span id="toastMessage">แจ้งเตือน</span>
     </div>
 
-    <!-- Footer -->
-    <footer class="py-3 text-center text-xs text-slate-500 border-t border-slate-800/80">
-        <p>Verb Master 100 • พัฒนาเพื่อการเรียนรู้คำศัพท์ภาษาอังกฤษอย่างสนุกสนาน</p>
-    </footer>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Firebase Setup Mandates
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'verb-match-100';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' 
-            ? JSON.parse(__firebase_config) 
-            : { apiKey: "demo-key", authDomain: "demo.firebaseapp.com", projectId: "demo-project" };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        let currentUser = null;
-
-        // Authenticaton Initialization
-        async function initAuth() {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    const userCred = await signInWithCustomToken(auth, __initial_auth_token);
-                    currentUser = userCred.user;
-                } else {
-                    const userCred = await signInAnonymously(auth);
-                    currentUser = userCred.user;
-                }
-            } catch (err) {
-                console.warn("Auth fallback to anonymous:", err);
-                try {
-                    const userCred = await signInAnonymously(auth);
-                    currentUser = userCred.user;
-                } catch(e) {
-                    console.error("Auth Failed completely", e);
-                }
-            }
-        }
-
-        // DATABASE: 100 English Verbs with Thai Meanings
+    <script>
         const VOCAB_100 = [
             { en: "Run", th: "วิ่ง" }, { en: "Walk", th: "เดิน" }, { en: "Eat", th: "กิน" }, { en: "Drink", th: "ดื่ม" },
             { en: "Sleep", th: "นอน" }, { en: "Read", th: "อ่าน" }, { en: "Write", th: "เขียน" }, { en: "Listen", th: "ฟัง" },
-            { en: "Speak", th: "พูด" }, { en: "Cook", th: "ทำอาหาร" }, { en: "Swim", th: "ว่ายน้ำ" }, { en: "Fly", th: "บิน" },
-            { en: "Jump", th: "กระโดด" }, { en: "Drive", th: "ขับรถ" }, { en: "Sing", th: "ร้องเพลง" }, { en: "Dance", th: "เต้น" },
-            { en: "Study", th: "เรียน" }, { en: "Teach", th: "สอน" }, { en: "Buy", th: "ซื้อ" }, { en: "Sell", th: "ขาย" },
-            { en: "Think", th: "คิด" }, { en: "Know", th: "รู้" }, { en: "Understand", th: "เข้าใจ" }, { en: "Remember", th: "จำ" },
-            { en: "Forget", th: "ลืม" }, { en: "Open", th: "เปิด" }, { en: "Close", th: "ปิด" }, { en: "Start", th: "เริ่ม" },
-            { en: "Finish", th: "เสร็จสิ้น" }, { en: "Clean", th: "ทำความสะอาด" }, { en: "Wash", th: "ล้าง" }, { en: "Build", th: "สร้าง" },
-            { en: "Destroy", th: "ทำลาย" }, { en: "Help", th: "ช่วยเหลือ" }, { en: "Ask", th: "ถาม" }, { en: "Answer", th: "ตอบ" },
-            { en: "Call", th: "โทร/
+            { en: "Speak", th: "พูด" }, { en: "Cook", th: "ทำอาหาร" }, { en: "Swim", th: "ว่ายน้ำ" }, { en: "Fly", th: "บิน" }
+        ];
+
+        let isMultiplayer = false;
+        let isHost = false;
+        let roomCode = "";
+        let players = {};
+        let playerId = "user_" + Math.random().toString(36).substr(2, 9);
+
+        let gameCards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let errors = 0;
+        let score = 0;
+        let maxErrors = 10;
+        let isLockBoard = false;
+        let timerInterval = null;
+        let previewInterval = null;
+        let timeLeft = 120;
+        let previewTime = 5;
+
+        const viewLobby = document.getElementById('viewLobby');
+        const viewRoomLobby = document.getElementById('viewRoomLobby');
+        const viewGameBoard = document.getElementById('viewGameBoard');
+        const viewGameOver = document.getElementById('viewGameOver');
+
+        const inputPlayerName = document.getElementById('inputPlayerName');
+        const displayPlayerName = document.getElementById('displayPlayerName');
+        const inputRoomCode = document.getElementById('inputRoomCode');
+
+        document.getElementById('btnStartSolo').addEventListener('click', startSoloGame);
+        document.getElementById('btnCreateRoom').addEventListener('click', createRoom);
+        document.getElementById('btnJoinRoom').addEventListener('click', joinRoom);
+        document.getElementById('btnStartRoomGame').addEventListener('click', startMultiGame);
+        document.getElementById('btnBackLobby').addEventListener('click', backToLobby);
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').innerText = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => toast.classList.add('opacity-0', 'pointer-events-none'), 2500);
+        }
+
+        function getPlayerName() {
+            const name = inputPlayerName.value.trim() || "ผู้เล่น";
+            displayPlayerName.innerText = name;
+            return name;
+        }
+
+        function startSoloGame() {
+            isMultiplayer = false;
+            getPlayerName();
+            initGameUI();
+        }
+
+        function createRoom() {
+            const name = getPlayerName();
+            isMultiplayer = true;
+            isHost = true;
+            roomCode = Math.floor(1000 + Math.random() * 9000).toString();
+            
+            players = {};
+            players[playerId] = { name, score: 0 };
+
+            document.getElementById('displayRoomCode').innerText = roomCode;
+            document.getElementById('btnStartRoomGame').classList.remove('hidden');
+            document.getElementById('waitingNotice').classList.add('hidden');
+
+            updatePlayerList();
+            viewLobby.classList.add('hidden');
+            viewRoomLobby.classList.remove('hidden');
+        }
+
+        function joinRoom() {
+            const code = inputRoomCode.value.trim();
+            if (code.length !== 4) return showToast("กรุณากรอกรหัสห้อง 4 หลัก");
+            
+            const name = getPlayerName();
+            isMultiplayer = true;
+            isHost = false;
+            roomCode = code;
+
+            players = {};
+            players[playerId] = { name, score: 0 };
+
+            document.getElementById('displayRoomCode').innerText = roomCode;
+            document.getElementById('btnStartRoomGame').classList.add('hidden');
+            document.getElementById('waitingNotice').classList.remove('hidden');
+
+            updatePlayerList();
+            viewLobby.classList.add('hidden');
+            viewRoomLobby.classList.remove('hidden');
+        }
+
+        function updatePlayerList() {
+            const listEl = document.getElementById('playerList');
+            listEl.innerHTML = '';
+            const playerKeys = Object.keys(players);
+            document.getElementById('playerCount').innerText = playerKeys.length;
+
+            playerKeys.forEach(id => {
+                listEl.innerHTML += `
+                    <div class="bg-slate-700/60 p-2 rounded-xl text-xs font-semibold flex items-center justify-between">
+                        <span class="truncate">${players[id].name}</span>
+                        ${id === playerId ? '<span class="text-[10px] bg-indigo-500/30 text-indigo-300 px-1.5 py-0.5 rounded">คุณ</span>' : ''}
+                    </div>
+                `;
+            });
+        }
+
+        function startMultiGame() {
+            initGameUI();
+        }
+
+        function initGameUI() {
+            matchedPairs = 0; errors = 0; score = 0; timeLeft = 120; previewTime = 5;
+            isLockBoard = true; flippedCards = [];
+
+            document.getElementById('matchedCount').innerText = "0";
+            document.getElementById('scoreDisplay').innerText = "0";
+            document.getElementById('errorCountDisplay').innerText = "0";
+            document.getElementById('previewTimer').innerText = "5";
+            document.getElementById('previewBanner').classList.remove('hidden');
+
+            if (isMultiplayer) {
+                document.getElementById('gameRoomBadge').classList.remove('hidden');
+                document.getElementById('hudRoomCode').innerText = roomCode;
+            } else {
+                document.getElementById('gameRoomBadge').classList.add('hidden');
+            }
+
+            updateLivesUI();
+            viewLobby.classList.add('hidden');
+            viewRoomLobby.classList.add('hidden');
+            viewGameOver.classList.add('hidden');
+            viewGameBoard.classList.remove('hidden');
+
+            setupCards();
+            startPreview();
+        }
+
+        function updateLivesUI() {
+            const container = document.getElementById('livesContainer');
+            container.innerHTML = '';
+            for (let i = 0; i < maxErrors - errors; i++) {
+                container.innerHTML += '<i class="fa-solid fa-heart"></i>';
+            }
+        }
+
+        function setupCards() {
+            const shuffledVocab = [...VOCAB_100].sort(() => 0.5 - Math.random()).slice(0, 6);
+            gameCards = [];
+            shuffledVocab.forEach((item, index) => {
+                gameCards.push({ id: index, text: item.en, pairId: index });
+                gameCards.push({ id: index, text: item.th, pairId: index });
+            });
+            gameCards.sort(() => 0.5 - Math.random());
+
+            const cardGrid = document.getElementById('cardGrid');
+            cardGrid.innerHTML = '';
+            gameCards.forEach((card, idx) => {
+                const cardEl = document.createElement('div');
+                cardEl.className = 'card perspective-1000 h-24 cursor-pointer flipped';
+                cardEl.dataset.pairId = card.pairId;
+                cardEl.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front"><i class="fa-solid fa-question text-white text-xl"></i></div>
+                        <div class="card-back text-sm font-bold">${card.text}</div>
+                    </div>
+                `;
+                cardEl.addEventListener('click', () => onCardClick(cardEl));
+                cardGrid.appendChild(cardEl);
+            });
+        }
+
+        function startPreview() {
+            previewInterval = setInterval(() => {
+                previewTime--;
+                document.getElementById('previewTimer').innerText = previewTime;
+                if (previewTime <= 0) {
+                    clearInterval(previewInterval);
+                    document.getElementById('previewBanner').classList.add('hidden');
+                    document.querySelectorAll('.card').forEach(c => c.classList.remove('flipped'));
+                    isLockBoard = false;
+                    startTimer();
+                }
+            }, 1000);
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const min = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+                const sec = String(timeLeft % 60).padStart(2, '0');
+                document.getElementById('timerText').innerText = `${min}:${sec}`;
+                document.getElementById('timerBar').style.width = `${(timeLeft / 120) * 100}%`;
+
+                if (timeLeft <= 0) endGame("หมดเวลา!");
+            }, 1000);
+        }
+
+        function onCardClick(cardEl) {
+            if (isLockBoard || cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
+
+            cardEl.classList.add('flipped');
+            flippedCards.push(cardEl);
+
+            if (flippedCards.length === 2) checkMatch();
+        }
+
+        function checkMatch() {
+            isLockBoard = true;
+            const [card1, card2] = flippedCards;
+
+            if (card1.dataset.pairId === card2.dataset.pairId) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                matchedPairs++;
+                score += 100;
+                document.getElementById('matchedCount').innerText = matchedPairs;
+                document.getElementById('scoreDisplay').innerText = score;
+                flippedCards = [];
+                isLockBoard = false;
+
+                if (matchedPairs === 6) endGame("ยินดีด้วย! คุณชนะแล้ว");
+            } else {
+                card1.classList.add('wrong');
+                card2.classList.add('wrong');
+                errors++;
+                document.getElementById('errorCountDisplay').innerText = errors;
+                updateLivesUI();
+
+                setTimeout(() => {
+                    card1.classList.remove('flipped', 'wrong');
+                    card2.classList.remove('flipped', 'wrong');
+                    flippedCards = [];
+                    isLockBoard = false;
+
+                    if (errors >= maxErrors) endGame("คุณใช้โควตาผิดพลาดครบแล้ว!");
+                }, 800);
+            }
+        }
+
+        function endGame(title) {
+            clearInterval(timerInterval);
+            clearInterval(previewInterval);
+
+            document.getElementById('endGameTitle').innerText = title;
+            document.getElementById('finalScore').innerText = score;
+            document.getElementById('finalPairs').innerText = `${matchedPairs} คู่`;
+            document.getElementById('finalErrors').innerText = `${errors}/${maxErrors}`;
+
+            const leaderboardSec = document.getElementById('leaderboardSection');
+            if (isMultiplayer) {
+                leaderboardSec.classList.remove('hidden');
+                document.getElementById('leaderboardList').innerHTML = `
+                    <div class="bg-slate-700/60 p-2 rounded-xl text-xs flex justify-between">
+                        <span>1. ${getPlayerName()} (คุณ)</span>
+                        <span class="font-bold text-amber-400">${score} คะแนน</span>
+                    </div>
+                `;
+            } else {
+                leaderboardSec.classList.add('hidden');
+            }
+
+            viewGameBoard.classList.add('hidden');
+            viewGameOver.classList.remove('hidden');
+        }
+
+        function backToLobby() {
+            viewGameOver.classList.add('hidden');
+            viewLobby.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
